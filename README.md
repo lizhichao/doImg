@@ -8,10 +8,12 @@ composer require lizhichao/one-img
 ```
 
 ```php
-$img = new \OneImg\DoImgs();
+$img_path = '1.jpg';
+$img = new \OneImg\Border();
 $img->setImg($img_path)
     ->scale(300, 300)
-    ->borderColor()
-    ->save();
+    ->outline()
+    ->save(); //输出到浏览器
+
 ```
 ![效果](https://github.com/lizhichao/doImg/blob/master/r.png)
