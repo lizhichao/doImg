@@ -1,4 +1,5 @@
 <?php
+
 namespace OneImg;
 
 class Border
@@ -59,6 +60,8 @@ class Border
         return $this;
     }
 
+    protected $value = [];
+
     public function outline()
     {
         $new_img = imagecreatetruecolor($this->width, $this->height);
@@ -71,17 +74,61 @@ class Border
                 $h2 = $this->gray(...$this->getRgb($x + 1 >= $mx ? $x : $x + 1, $y));
                 $h3 = $this->gray(...$this->getRgb($x, $y + 1 >= $my ? $y : $y + 1));
                 $v  = max(abs($h1 - $h2), abs($h1 - $h3));
-                if ($v > 23) {
+                if ($v > 24) {
                     $c = 255;
                 } else if ($v > 12) {
                     $c = 128;
                 } else {
                     $c = 0;
                 }
-                $color = imageColorAllocate($this->img, $c, $c, $c);
+                $this->value[$x][$y] = $c;
+                $color               = imageColorAllocate($this->img, $c, $c, $c);
                 imagesetpixel($new_img, $x, $y, $color);
             }
         }
+        $this->img = $new_img;
+        return $this;
+    }
+
+    public function light()
+    {
+        $new_img = imagecreatetruecolor($this->width, $this->height);
+        $mx      = $this->width;
+        $my      = $this->height;
+        for ($x = 0; $x < $mx; $x++) {
+            $row = $this->value[$x];
+            $p   = 0;
+            $y1  = 0;
+            foreach ($row as $y => $v) {
+                if ($v > $p) {
+                    $p  = $v;
+                    $y1 = $y;
+                }
+                if ($p > 0 && $v === 0) {
+                    $color = imageColorAllocate($this->img, $p, $p, $p);
+                    imagesetpixel($new_img, $x, $y1, $color);
+                    $p = 0;
+                }
+            }
+        }
+
+        for ($y = 0; $y < $my; $y++) {
+            $p  = 0;
+            $x1 = 0;
+            for ($x = 0; $x < $mx; $x++) {
+                $v = $this->value[$x][$y];
+                if ($v > $p) {
+                    $p  = $v;
+                    $x1 = $x;
+                }
+                if ($p > 0 && $v === 0) {
+                    $color = imageColorAllocate($this->img, $p, $p, $p);
+                    imagesetpixel($new_img, $x1, $y, $color);
+                    $p = 0;
+                }
+            }
+        }
+
         $this->img = $new_img;
         return $this;
     }

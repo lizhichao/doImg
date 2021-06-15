@@ -7,6 +7,7 @@ if (isset($_GET['img'])) {
     $img->setImg(glob($path)[$_GET['img']])
         ->scale(300, 300)
         ->outline()
+        ->light()
         ->save();
     exit;
 }
