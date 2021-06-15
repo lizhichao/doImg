@@ -8,6 +8,7 @@ if (isset($_GET['img'])) {
         ->scale(300, 300)
         ->outline()
         ->light()
+        ->delP()
         ->save();
     exit;
 }

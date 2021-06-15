@@ -132,4 +132,30 @@ class Border
         $this->img = $new_img;
         return $this;
     }
+
+    public function delP()
+    {
+        $mx = $this->width;
+        $my = $this->height;
+        for ($x = 1; $x < ($mx - 1); $x++) {
+            for ($y = 1; $y < ($my - 1); $y++) {
+                list($v,) = $this->getRgb($x, $y);
+                if ($v > 0) {
+                    list($v1,) = $this->getRgb($x - 1, $y - 1);
+                    list($v2,) = $this->getRgb($x, $y - 1);
+                    list($v3,) = $this->getRgb($x + 1, $y - 1);
+                    list($v4,) = $this->getRgb($x + 1, $y);
+                    list($v5,) = $this->getRgb($x + 1, $y + 1);
+                    list($v6,) = $this->getRgb($x, $y + 1);
+                    list($v7,) = $this->getRgb($x - 1, $y + 1);
+                    list($v8,) = $this->getRgb($x - 1, $y);
+                    if ($v1 + $v2 + $v3 + $v4 + $v5 + $v6 + $v7 + $v8 < 1) {
+                        $color = imageColorAllocate($this->img, 0, 0, 0);
+                        imagesetpixel($this->img, $x, $y, $color);
+                    }
+                }
+            }
+        }
+        return $this;
+    }
 }
