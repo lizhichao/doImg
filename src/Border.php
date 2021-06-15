@@ -74,10 +74,10 @@ class Border
                 $h2 = $this->gray(...$this->getRgb($x + 1 >= $mx ? $x : $x + 1, $y));
                 $h3 = $this->gray(...$this->getRgb($x, $y + 1 >= $my ? $y : $y + 1));
                 $v  = max(abs($h1 - $h2), abs($h1 - $h3));
-                if ($v > 24) {
+                if ($v > 32) {
                     $c = 255;
                 } else if ($v > 12) {
-                    $c = 128;
+                    $c = 96;
                 } else {
                     $c = 0;
                 }
